@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workforce Intelligence | EndurxLabs</title>
+    <meta name="description" content="A killer project built with Oat.ink - High-impact workforce automation.">
+    <link rel="stylesheet" href="https://oat.ink/oat.min.css">
+    <script src="https://oat.ink/oat.min.js" defer></script>
+    <style>
+        :root {
+            --brand-color: #0070f3;
+        }
+        body {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .hero {
+            text-align: center;
+            padding: 6rem 0;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #000, #666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        [data-theme="dark"] .hero h1 {
+            background: linear-gradient(to right, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        .card {
+            padding: 2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--brand-color);
+        }
+        footer {
+            margin-top: 8rem;
+            padding: 4rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+        .cta-section {
+            background: var(--bg-alt);
+            padding: 4rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 4rem 0;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <header>
+        <div style="font-weight: bold; font-size: 1.5rem; tracking: -0.05em;">ENDURX LABS</div>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <button class="outline small" onclick="toggleTheme()">Toggle Theme</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Engineering the <br>Future of Workforce.</h1>
+            <p class="text-light">High-impact AI solutions engineered for extreme performance and global reliability.</p>
+            <div style="margin-top: 2rem;">
+                <button onclick="alert('Launching soon!')">Launch Platform</button>
+                <button class="outline" onclick="window.location.href='#features'">Explore Portfolio</button>
+            </div>
+        </section>
+
+        <section id="features" class="grid">
+            <div class="card">
+                <h3>AgentFactory</h3>
+                <p>Deploy autonomous AI clones that handle brand management and operations.</p>
+                <a href="#">Learn more →</a>
+            </div>
+            <div class="card">
+                <h3>LeadMate</h3>
+                <p>Intelligent lead management and sales automation at scale.</p>
+                <a href="#">Learn more →</a>
+            </div>
+            <div class="card">
+                <h3>Docs Analyzer</h3>
+                <p>Automated document parsing and insight extraction engine.</p>
+                <a href="#">Learn more →</a>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2>Ready to automate?</h2>
+            <p>Join the next generation of high-performance engineering.</p>
+            <button>Get Started</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 EndurxLabs. Built with <a href="https://oat.ink">Oat.ink</a>.</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const theme = body.getAttribute('data-theme');
+            if (theme === 'dark') {
+                body.removeAttribute('data-theme');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+            }
+        }
+    </script>
+</body>
+</html>
