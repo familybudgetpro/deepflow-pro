@@ -3,132 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workforce Intelligence | EndurxLabs</title>
-    <meta name="description" content="A killer project built with Oat.ink - High-impact workforce automation.">
+    <title>DeepFlow | High-Performance Dashboard</title>
+    <meta name="description" content="A minimalist high-performance productivity dashboard built with Oat.ink.">
     <link rel="stylesheet" href="https://oat.ink/oat.min.css">
     <script src="https://oat.ink/oat.min.js" defer></script>
     <style>
         :root {
-            --brand-color: #0070f3;
+            --brand: #6366f1;
+            --brand-hover: #4f46e5;
+            --bg: #fafafa;
+            --card-bg: #ffffff;
+            --text: #18181b;
+            --text-dim: #71717a;
+            --border: #e4e4e7;
         }
+
+        [data-theme="dark"] {
+            --bg: #09090b;
+            --card-bg: #18181b;
+            --text: #fafafa;
+            --text-dim: #a1a1aa;
+            --border: #27272a;
+        }
+
         body {
-            max-width: 1200px;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, sans-serif;
+            transition: background 0.3s, color 0.3s;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 2rem;
         }
+
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2rem 0;
-            border-bottom: 1px solid var(--border);
+            margin-bottom: 4rem;
         }
-        .hero {
-            text-align: center;
-            padding: 6rem 0;
+
+        .logo {
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            font-size: 1.25rem;
+            color: var(--brand);
         }
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, #000, #666);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        [data-theme="dark"] .hero h1 {
-            background: linear-gradient(to right, #fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .grid {
+
+        .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr 1.5fr;
             gap: 2rem;
-            margin-top: 4rem;
         }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .card {
-            padding: 2rem;
+            background: var(--card-bg);
             border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+        }
+
+        .timer-display {
+            font-size: 5rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            margin: 1.5rem 0;
+            text-align: center;
+            letter-spacing: -0.02em;
+        }
+
+        .task-input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            gap: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .task-item:last-child { border-bottom: none; }
+
+        .task-item input[type="checkbox"] {
+            width: 1.2rem;
+            height: 1.2rem;
+            accent-color: var(--brand);
+        }
+
+        .task-text { flex: 1; font-weight: 500; }
+        .completed .task-text { text-decoration: line-through; color: var(--text-dim); }
+
+        .btn-primary {
+            background: var(--brand);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover { background: var(--brand-hover); }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
             border-radius: 8px;
-            transition: transform 0.2s;
+            cursor: pointer;
+            color: var(--text);
         }
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--brand-color);
-        }
-        footer {
-            margin-top: 8rem;
-            padding: 4rem 0;
-            text-align: center;
-            border-top: 1px solid var(--border);
-        }
-        .cta-section {
-            background: var(--bg-alt);
-            padding: 4rem;
-            border-radius: 12px;
-            text-align: center;
-            margin: 4rem 0;
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--border);
+            margin-bottom: 1rem;
         }
     </style>
 </head>
 <body data-theme="dark">
     <header>
-        <div style="font-weight: bold; font-size: 1.5rem; tracking: -0.05em;">ENDURX LABS</div>
-        <nav>
-            <a href="#features">Features</a>
-            <a href="#about">About</a>
-            <button class="outline small" onclick="toggleTheme()">Toggle Theme</button>
-        </nav>
+        <div class="logo">DEEPFLOW</div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <button class="btn-outline" onclick="toggleTheme()">🌓</button>
+            <span id="current-date" style="font-size: 0.875rem; color: var(--text-dim);"></span>
+        </div>
     </header>
 
-    <main>
-        <section class="hero">
-            <h1>Engineering the <br>Future of Workforce.</h1>
-            <p class="text-light">High-impact AI solutions engineered for extreme performance and global reliability.</p>
-            <div style="margin-top: 2rem;">
-                <button onclick="alert('Launching soon!')">Launch Platform</button>
-                <button class="outline" onclick="window.location.href='#features'">Explore Portfolio</button>
+    <main class="dashboard-grid">
+        <!-- Timer Card -->
+        <div class="card">
+            <span class="status-badge">DEEP WORK SESSION</span>
+            <div class="timer-display" id="timer">25:00</div>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn-primary" id="start-btn" onclick="toggleTimer()">Start Session</button>
+                <button class="btn-outline" onclick="resetTimer()">Reset</button>
             </div>
-        </section>
+            <p style="margin-top: 1.5rem; font-size: 0.875rem; color: var(--text-dim); text-align: center;">
+                Focus on your one "Killer Task" for this session.
+            </p>
+        </div>
 
-        <section id="features" class="grid">
-            <div class="card">
-                <h3>AgentFactory</h3>
-                <p>Deploy autonomous AI clones that handle brand management and operations.</p>
-                <a href="#">Learn more →</a>
+        <!-- Tasks Card -->
+        <div class="card">
+            <h3 style="margin-top: 0;">Priority Stack</h3>
+            <div class="task-input-group">
+                <input type="text" id="task-input" placeholder="What's next?" onkeypress="if(event.key === 'Enter') addTask()">
+                <button class="btn-primary" style="width: auto;" onclick="addTask()">Add</button>
             </div>
-            <div class="card">
-                <h3>LeadMate</h3>
-                <p>Intelligent lead management and sales automation at scale.</p>
-                <a href="#">Learn more →</a>
-            </div>
-            <div class="card">
-                <h3>Docs Analyzer</h3>
-                <p>Automated document parsing and insight extraction engine.</p>
-                <a href="#">Learn more →</a>
-            </div>
-        </section>
-
-        <section class="cta-section">
-            <h2>Ready to automate?</h2>
-            <p>Join the next generation of high-performance engineering.</p>
-            <button>Get Started</button>
-        </section>
+            <ul class="task-list" id="task-list">
+                <!-- Tasks will appear here -->
+            </ul>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2026 EndurxLabs. Built with <a href="https://oat.ink">Oat.ink</a>.</p>
+    <footer style="margin-top: 4rem; text-align: center; color: var(--text-dim); font-size: 0.875rem;">
+        &copy; 2026 EndurxLabs. Engineered for Focus.
     </footer>
 
     <script>
+        // Date Display
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { 
+            weekday: 'long', month: 'short', day: 'numeric' 
+        });
+
+        // Theme Toggle
         function toggleTheme() {
             const body = document.body;
-            const theme = body.getAttribute('data-theme');
-            if (theme === 'dark') {
+            if (body.getAttribute('data-theme') === 'dark') {
                 body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
             } else {
                 body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
             }
         }
+
+        // Timer Logic
+        let timeLeft = 25 * 60;
+        let timerId = null;
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').innerText = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('start-btn');
+            if (timerId) {
+                clearInterval(timerId);
+                timerId = null;
+                btn.innerText = 'Resume Session';
+            } else {
+                timerId = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    if (timeLeft <= 0) {
+                        clearInterval(timerId);
+                        alert('Deep work session complete!');
+                    }
+                }, 1000);
+                btn.innerText = 'Pause';
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerId);
+            timerId = null;
+            timeLeft = 25 * 60;
+            updateTimerDisplay();
+            document.getElementById('start-btn').innerText = 'Start Session';
+        }
+
+        // Task Logic
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [
+            { text: 'Finalize EndurxLabs Cloudflare', completed: false },
+            { text: 'Review LeadMate code', completed: true }
+        ];
+
+        function renderTasks() {
+            const list = document.getElementById('task-list');
+            list.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.className = `task-item ${task.completed ? 'completed' : ''}`;
+                li.innerHTML = `
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index})">
+                    <span class="task-text">${task.text}</span>
+                    <button class="btn-outline" style="padding: 0.2rem 0.5rem; border: none;" onclick="deleteTask(${index})">×</button>
+                `;
+                list.appendChild(li);
+            });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        function addTask() {
+            const input = document.getElementById('task-input');
+            if (input.value.trim()) {
+                tasks.unshift({ text: input.value.trim(), completed: false });
+                input.value = '';
+                renderTasks();
+            }
+        }
+
+        function toggleTask(index) {
+            tasks[index].completed = !tasks[index].completed;
+            renderTasks();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            renderTasks();
+        }
+
+        renderTasks();
     </script>
 </body>
 </html>
