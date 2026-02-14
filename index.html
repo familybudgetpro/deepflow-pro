@@ -3,229 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeepFlow | High-Performance Dashboard</title>
-    <meta name="description" content="A minimalist high-performance productivity dashboard built with Oat.ink.">
+    <title>DeepFlow Pro | High-Performance Dashboard</title>
+    <meta name="description" content="A premium productivity dashboard showcasing that Oat.ink delivers pro-level aesthetics with zero bloat.">
     <link rel="stylesheet" href="https://oat.ink/oat.min.css">
     <script src="https://oat.ink/oat.min.js" defer></script>
     <style>
         :root {
             --brand: #6366f1;
-            --brand-hover: #4f46e5;
-            --bg: #fafafa;
-            --card-bg: #ffffff;
-            --text: #18181b;
-            --text-dim: #71717a;
-            --border: #e4e4e7;
+            --brand-soft: rgba(99, 102, 241, 0.1);
+            --bg: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text: #0f172a;
+            --text-dim: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
         }
 
         [data-theme="dark"] {
-            --bg: #09090b;
-            --card-bg: #18181b;
-            --text: #fafafa;
-            --text-dim: #a1a1aa;
-            --border: #27272a;
+            --bg: #020617;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --text: #f1f5f9;
+            --text-dim: #94a3b8;
+            --border: #1e293b;
         }
 
         body {
             background-color: var(--bg);
+            background-image: radial-gradient(circle at 2px 2px, var(--border) 1px, transparent 0);
+            background-size: 40px 40px;
             color: var(--text);
             font-family: system-ui, -apple-system, sans-serif;
-            transition: background 0.3s, color 0.3s;
-            max-width: 1000px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+            line-height: 1.5;
         }
 
+        /* Layout & Containers */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            padding: 1rem 0;
         }
 
         .logo {
             font-weight: 800;
             letter-spacing: -0.05em;
-            font-size: 1.25rem;
-            color: var(--brand);
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--brand), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 2rem;
+            grid-template-columns: 320px 1fr 300px;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .stats-panel { grid-column: span 2; }
         }
 
         @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .stats-panel { grid-column: span 1; }
         }
 
+        /* Components */
         .card {
             background: var(--card-bg);
+            backdrop-filter: blur(12px);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, border-color 0.2s;
         }
 
+        .card:hover {
+            border-color: var(--brand);
+        }
+
+        /* Timer Section */
         .timer-display {
-            font-size: 5rem;
+            font-size: 4rem;
             font-weight: 800;
             font-variant-numeric: tabular-nums;
-            margin: 1.5rem 0;
+            margin: 1rem 0;
             text-align: center;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.04em;
         }
 
-        .task-input-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 0.75rem 1rem;
+        /* Progress Circle (CSS Only) */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
             border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--brand);
+            width: 0%;
+            transition: width 1s linear;
         }
 
+        /* Task List */
         .task-list {
             list-style: none;
             padding: 0;
-            margin: 0;
         }
 
         .task-item {
             display: flex;
             align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-            gap: 1rem;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .task-item:last-child { border-bottom: none; }
-
-        .task-item input[type="checkbox"] {
-            width: 1.2rem;
-            height: 1.2rem;
-            accent-color: var(--brand);
-        }
-
-        .task-text { flex: 1; font-weight: 500; }
-        .completed .task-text { text-decoration: line-through; color: var(--text-dim); }
-
-        .btn-primary {
-            background: var(--brand);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.2s;
-        }
-
-        .btn-primary:hover { background: var(--brand-hover); }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            padding: 0.5rem 1rem;
+            padding: 0.875rem;
+            background: var(--brand-soft);
             border-radius: 8px;
-            cursor: pointer;
-            color: var(--text);
+            margin-bottom: 0.75rem;
+            gap: 1rem;
+            animation: slideIn 0.3s ease-out;
+            border: 1px solid transparent;
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            background: var(--border);
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .task-item:hover { border-color: var(--brand); }
+        .task-text { flex: 1; font-weight: 500; font-size: 0.95rem; }
+        .completed { opacity: 0.6; filter: grayscale(1); }
+        .completed .task-text { text-decoration: line-through; }
+
+        /* Stats & Analytics */
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 100px;
+            margin-top: 2rem;
+        }
+        .bar {
+            flex: 1;
+            background: var(--brand);
+            border-radius: 4px 4px 0 0;
+            opacity: 0.3;
+            transition: opacity 0.3s, height 0.5s;
+        }
+        .bar:hover { opacity: 1; }
+
+        /* Inputs & Buttons Overrides */
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        button {
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            transition: all 0.2s !important;
+        }
+
+        .btn-icon {
+            padding: 0.5rem !important;
+            line-height: 0;
+            background: transparent;
+            border: none;
+        }
+
+        /* Dialog Styling */
+        dialog {
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            background: var(--card-bg);
+            color: var(--text);
+            max-width: 400px;
         }
     </style>
 </head>
 <body data-theme="dark">
     <header>
-        <div class="logo">DEEPFLOW</div>
-        <div style="display: flex; gap: 1rem; align-items: center;">
-            <button class="btn-outline" onclick="toggleTheme()">🌓</button>
-            <span id="current-date" style="font-size: 0.875rem; color: var(--text-dim);"></span>
+        <div class="logo">DEEPFLOW <span style="font-weight: 300; opacity: 0.5;">PRO</span></div>
+        <div style="display: flex; gap: 0.75rem;">
+            <button class="outline small" onclick="toggleTheme()">🌓</button>
+            <button class="outline small" onclick="document.getElementById('settings-modal').showModal()">⚙️</button>
         </div>
     </header>
 
     <main class="dashboard-grid">
-        <!-- Timer Card -->
+        <!-- Panel 1: Session Control -->
         <div class="card">
-            <span class="status-badge">DEEP WORK SESSION</span>
+            <h4 style="margin: 0; font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em;">Focus Timer</h4>
             <div class="timer-display" id="timer">25:00</div>
-            <div style="display: flex; gap: 1rem;">
-                <button class="btn-primary" id="start-btn" onclick="toggleTimer()">Start Session</button>
-                <button class="btn-outline" onclick="resetTimer()">Reset</button>
+            <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1.5rem;">
+                <button id="start-btn" onclick="toggleTimer()">Start</button>
+                <button class="outline" onclick="resetTimer()">Reset</button>
             </div>
-            <p style="margin-top: 1.5rem; font-size: 0.875rem; color: var(--text-dim); text-align: center;">
-                Focus on your one "Killer Task" for this session.
+            <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-dim); text-align: center;">
+                Session #4 of the day. You're in the top 5% of focusers.
             </p>
         </div>
 
-        <!-- Tasks Card -->
+        <!-- Panel 2: Core Workflow -->
         <div class="card">
-            <h3 style="margin-top: 0;">Priority Stack</h3>
-            <div class="task-input-group">
-                <input type="text" id="task-input" placeholder="What's next?" onkeypress="if(event.key === 'Enter') addTask()">
-                <button class="btn-primary" style="width: auto;" onclick="addTask()">Add</button>
+            <h4 style="margin: 0 0 1.5rem 0;">Priority Stack</h4>
+            <input type="text" id="task-input" placeholder="Press Enter to add task..." onkeypress="if(event.key === 'Enter') addTask()">
+            <div class="task-list" id="task-list">
+                <!-- Tasks dynamic -->
             </div>
-            <ul class="task-list" id="task-list">
-                <!-- Tasks will appear here -->
-            </ul>
+        </div>
+
+        <!-- Panel 3: Analytics -->
+        <div class="card stats-panel">
+            <h4 style="margin: 0 0 1.5rem 0;">Insights</h4>
+            <div class="stat-row">
+                <span class="text-dim">Daily Goal</span>
+                <span>85%</span>
+            </div>
+            <div class="stat-row">
+                <span class="text-dim">Focus Score</span>
+                <span style="color: #10b981;">+12% ↑</span>
+            </div>
+            
+            <div class="bar-chart">
+                <div class="bar" style="height: 40%;"></div>
+                <div class="bar" style="height: 70%;"></div>
+                <div class="bar" style="height: 50%;"></div>
+                <div class="bar" style="height: 90%;"></div>
+                <div class="bar" style="height: 60%;"></div>
+                <div class="bar" style="height: 85%;"></div>
+                <div class="bar" style="height: 45%;"></div>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-dim); text-align: center;">Weekly Productivity Distribution</p>
         </div>
     </main>
 
-    <footer style="margin-top: 4rem; text-align: center; color: var(--text-dim); font-size: 0.875rem;">
-        &copy; 2026 EndurxLabs. Engineered for Focus.
+    <!-- Settings Modal (Native Dialog) -->
+    <dialog id="settings-modal">
+        <h3 style="margin-top: 0;">Settings</h3>
+        <label>Focus Duration (min)</label>
+        <input type="number" value="25" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+            <button onclick="this.closest('dialog').close()" style="width: 100%;">Save</button>
+            <button class="outline" onclick="this.closest('dialog').close()" style="width: 100%;">Cancel</button>
+        </div>
+    </dialog>
+
+    <footer style="margin-top: 5rem; text-align: center;">
+        <p style="color: var(--text-dim); font-size: 0.8rem;">
+            No React. No Tailwind. No Bloat. <br>
+            <strong>Built with Oat.ink + Vanilla JS</strong>
+        </p>
     </footer>
 
     <script>
-        // Date Display
-        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { 
-            weekday: 'long', month: 'short', day: 'numeric' 
-        });
-
-        // Theme Toggle
+        // Theme Logic
         function toggleTheme() {
             const body = document.body;
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            }
+            body.getAttribute('data-theme') === 'dark' ? body.removeAttribute('data-theme') : body.setAttribute('data-theme', 'dark');
         }
 
         // Timer Logic
-        let timeLeft = 25 * 60;
+        let initialTime = 25 * 60;
+        let timeLeft = initialTime;
         let timerId = null;
 
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            document.getElementById('timer').innerText = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        function updateDisplay() {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            document.getElementById('timer').innerText = `${m}:${s.toString().padStart(2, '0')}`;
+            const percent = ((initialTime - timeLeft) / initialTime) * 100;
+            document.getElementById('progress').style.width = `${percent}%`;
         }
 
         function toggleTimer() {
@@ -233,15 +309,12 @@
             if (timerId) {
                 clearInterval(timerId);
                 timerId = null;
-                btn.innerText = 'Resume Session';
+                btn.innerText = 'Resume';
             } else {
                 timerId = setInterval(() => {
                     timeLeft--;
-                    updateTimerDisplay();
-                    if (timeLeft <= 0) {
-                        clearInterval(timerId);
-                        alert('Deep work session complete!');
-                    }
+                    updateDisplay();
+                    if (timeLeft <= 0) clearInterval(timerId);
                 }, 1000);
                 btn.innerText = 'Pause';
             }
@@ -250,53 +323,42 @@
         function resetTimer() {
             clearInterval(timerId);
             timerId = null;
-            timeLeft = 25 * 60;
-            updateTimerDisplay();
-            document.getElementById('start-btn').innerText = 'Start Session';
+            timeLeft = initialTime;
+            updateDisplay();
+            document.getElementById('start-btn').innerText = 'Start';
         }
 
         // Task Logic
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || [
-            { text: 'Finalize EndurxLabs Cloudflare', completed: false },
-            { text: 'Review LeadMate code', completed: true }
+        let tasks = [
+            { text: 'Finalize EndurxLabs Cloudflare', done: false },
+            { text: 'Deploy DeepFlow Pro', done: true },
+            { text: 'Coffee Break', done: false }
         ];
 
-        function renderTasks() {
-            const list = document.getElementById('task-list');
-            list.innerHTML = '';
-            tasks.forEach((task, index) => {
-                const li = document.createElement('li');
-                li.className = `task-item ${task.completed ? 'completed' : ''}`;
-                li.innerHTML = `
-                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index})">
-                    <span class="task-text">${task.text}</span>
-                    <button class="btn-outline" style="padding: 0.2rem 0.5rem; border: none;" onclick="deleteTask(${index})">×</button>
-                `;
-                list.appendChild(li);
-            });
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+        function render() {
+            const container = document.getElementById('task-list');
+            container.innerHTML = tasks.map((t, i) => `
+                <div class="task-item ${t.done ? 'completed' : ''}">
+                    <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${i})">
+                    <span class="task-text">${t.text}</span>
+                    <button class="btn-icon" onclick="deleteTask(${i})">×</button>
+                </div>
+            `).join('');
         }
 
         function addTask() {
             const input = document.getElementById('task-input');
-            if (input.value.trim()) {
-                tasks.unshift({ text: input.value.trim(), completed: false });
+            if (input.value) {
+                tasks.unshift({ text: input.value, done: false });
                 input.value = '';
-                renderTasks();
+                render();
             }
         }
 
-        function toggleTask(index) {
-            tasks[index].completed = !tasks[index].completed;
-            renderTasks();
-        }
+        function toggleTask(i) { tasks[i].done = !tasks[i].done; render(); }
+        function deleteTask(i) { tasks.splice(i, 1); render(); }
 
-        function deleteTask(index) {
-            tasks.splice(index, 1);
-            renderTasks();
-        }
-
-        renderTasks();
+        render();
     </script>
 </body>
 </html>
